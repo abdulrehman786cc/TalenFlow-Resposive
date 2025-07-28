@@ -82,7 +82,15 @@ export function Sidebar({ activeTab, setActiveTab, collapsed, setCollapsed, isMo
             {(!collapsed || isMobile) && (
               <div>
                 <h1 className="text-lg font-semibold text-gray-100">TalentFlow</h1>
-                <p className="text-xs text-gray-400">Powered by ClickChain.ai</p>
+                <p className="text-xs text-gray-400">
+                  Powered by{" "}
+                  <a
+                    href="https://clickchain.ai/"
+                    className="hover:text-talent-accent transition-colors text-[#0583E5]"
+                  >
+                    ClickChain.ai
+                  </a>
+                </p>
               </div>
             )}
           </div>
