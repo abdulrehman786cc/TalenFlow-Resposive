@@ -85,15 +85,18 @@ export function Sidebar({ activeTab, setActiveTab, collapsed, setCollapsed, isMo
                 <p className="text-xs text-gray-400">
                   Powered by{" "}
                   <a
-                    href="https://clickchain.ai/"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      window.location.href = "https://clickchain.ai/";
-                    }}
-                    className="hover:text-talent-accent transition-colors text-[#0583E5]"
-                  >
-                    ClickChain.ai
-                  </a>
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (window.top) {
+                      window.top.location.href = "https://clickchain.ai/";
+                    }
+                  }}
+                  className="hover:text-talent-accent transition-colors text-[#0583E5]"
+                >
+                  ClickChain.ai
+                </a>
+
                 </p>
               </div>
             )}
