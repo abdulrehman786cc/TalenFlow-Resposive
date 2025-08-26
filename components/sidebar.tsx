@@ -1,9 +1,8 @@
 "use client"
 
 import { useEffect } from "react"
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Home, Users, FileText, Cpu, GraduationCap, Bell, ChevronLeft, ChevronRight } from "lucide-react"
+import { Home, Users, FileText, Cpu, GraduationCap, Bell, ChevronLeft, ChevronRight, List } from "lucide-react"
 
 interface SidebarProps {
   activeTab: string
@@ -17,19 +16,23 @@ export function Sidebar({ activeTab, setActiveTab, collapsed, setCollapsed, isMo
   const navItems = [
     { id: "dashboard", label: "Dashboard Home", icon: Home },
     { id: "candidate-flow", label: "Candidate Flow", icon: Users, badge: 12 },
-    { id: "agent-logs", label: "Agent Logs", icon: FileText },
+    { id: "agent-logs", label: "Agent Logs", icon: List },
     { id: "agent-widgets", label: "Agent Widgets", icon: Cpu },
     { id: "training-console", label: "Training Console", icon: GraduationCap },
   ]
 
   // Handle mobile sidebar behavior
-  const handleTabClick = (tabId: string) => {
-    setActiveTab(tabId)
-    // Auto-close sidebar on mobile after selection
-    if (isMobile) {
-      setCollapsed(true)
+  const handleTabClick = (tabId: string, external?: string) => {
+  if (external) {
+    if (window.top) {
+      window.top.location.href = external; // ensures top-level navigation
     }
+    return;
   }
+  setActiveTab(tabId);
+  if (isMobile) setCollapsed(true);
+};
+
 
   // Prevent body scroll when mobile sidebar is open
   useEffect(() => {
@@ -105,54 +108,48 @@ export function Sidebar({ activeTab, setActiveTab, collapsed, setCollapsed, isMo
 
         {/* Navigation */}
         <nav className="flex-1 p-4">
-          <ul className="space-y-2">
-            {navItems.map((item) => {
-              const Icon = item.icon
-              return (
-                <li key={item.id}>
-                  <button
-                    onClick={() => handleTabClick(item.id)}
-                    className={`w-full flex items-center ${
-                      collapsed && !isMobile ? "justify-center" : "space-x-3"
-                    } px-3 py-2 rounded-lg text-left transition-colors group relative ${
-                      activeTab === item.id
-                        ? "bg-talent-accent text-white"
-                        : "text-gray-300 hover:bg-gray-800 hover:text-gray-100"
-                    }`}
-                    title={collapsed && !isMobile ? item.label : undefined}
-                  >
-                    <Icon className="w-5 h-5 flex-shrink-0" />
-                    {(!collapsed || isMobile) && (
-                      <>
-                        <span className="flex-1 text-sm font-medium">{item.label}</span>
-                        {item.badge && (
-                          <Badge variant="secondary" className="bg-red-600 text-white text-xs">
-                            {item.badge}
-                          </Badge>
-                        )}
-                      </>
-                    )}
-                    {collapsed && !isMobile && item.badge && (
-                      <Badge
-                        variant="secondary"
-                        className="absolute -top-1 -right-1 bg-red-600 text-white text-xs w-5 h-5 flex items-center justify-center p-0"
-                      >
-                        {item.badge}
-                      </Badge>
-                    )}
+         <ul className="space-y-2">
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            return (
+              <li key={item.id}>
+                <button
+                  onClick={() => handleTabClick(item.id)}
+                  className={`w-full flex items-center ${
+                    collapsed && !isMobile ? "justify-center" : "space-x-3"
+                  } px-3 py-2 rounded-lg text-left transition-colors group relative ${
+                    activeTab === item.id
+                      ? "bg-talent-accent text-white"
+                      : "text-gray-300 hover:bg-gray-800 hover:text-gray-100"
+                  }`}
+                  title={collapsed && !isMobile ? item.label : undefined}
+                >
+                  <Icon className="w-5 h-5 flex-shrink-0" />
+                  {(!collapsed || isMobile) && (
+                    <span className="flex-1 text-sm font-medium">{item.label}</span>
+                  )}
+                </button>
+              </li>
+            );
+          })}
 
-                    {/* Tooltip for collapsed desktop state */}
-                    {collapsed && !isMobile && (
-                      <div className="absolute left-full ml-2 px-2 py-1 bg-gray-800 text-gray-100 text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">
-                        {item.label}
-                        {item.badge && <span className="ml-2 text-red-400">({item.badge})</span>}
-                      </div>
-                    )}
-                  </button>
-                </li>
-              )
-            })}
-          </ul>
+          {/* NEW Resume Analyzer Button */}
+          <li>
+            <button
+              onClick={() => window.top.location.href = "https://clickchain.ai/talentacquisition/talentflow/insights-agent/"}
+              className={`w-full flex items-center ${
+                collapsed && !isMobile ? "justify-center" : "space-x-3"
+              } px-3 py-2 rounded-lg text-left transition-colors group relative text-gray-300 hover:bg-gray-800 hover:text-gray-100`}
+              title={collapsed && !isMobile ? "Resume Analyzer" : undefined}
+            >
+              <FileText className="w-5 h-5 flex-shrink-0" />
+              {(!collapsed || isMobile) && (
+                <span className="flex-1 text-sm font-medium">Resume Analyzer</span>
+              )}
+            </button>
+          </li>
+        </ul>
+
         </nav>
 
         {/* Notification Area */}
